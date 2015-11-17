@@ -65,7 +65,6 @@ function newCloud(callback) {
         session.key = res.data.auth_key
         session.cloud = res.data.cloud
         session.edit = res.data.edit
-        console.log(session)
         return callback()
       }
     )
@@ -121,8 +120,21 @@ function upload(callback) {
   // cli api
   program
     .version('1.0')
-    .usage('[options] <file>')
+    .usage('<file>')
     .parse(process.argv)
+
+  if(program.args.length != 1) {
+    program.help()
+    process.exit(1)
+  }
+
+  // see if file exists
+  try {
+    fs.statSync(program.args[0]);
+  } catch(err) {
+    program.help()
+    process.exit(1)
+  }
 
   async.series([
     auth,
