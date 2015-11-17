@@ -1,7 +1,7 @@
 # Node Pointscene Client
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
-Upload pointclouds to your Pointscene account from the command line interactively.
+Upload pointclouds to your [Pointscene.com](https://pointscene.com) account from the command line interactively.
 
 This is an example implementation of a remote cloud import to Pointscene.com
 
@@ -72,7 +72,7 @@ log => <login>
 pwd => <password>
 ```
 
-On success, the server responds with the proper auth cookie headers for WordPress. The look something like this.
+On success, the server responds with the proper auth cookie headers for WordPress. They should look something like this.
 
 ```
 Set-Cookie:wordpress_logged_in_b4dffb8470e581428ecd9201bb2afc14=antti%7C1447958609%7Ck97nm4ManduZxaEy67kZTTiKdTjrcqhG4dANEy1wwr0%7C1205ab6321e4de4cafbaf8ea013744f1c2ed12f586272f2d55037846b45b6938; domain=.pointscene.com; httponly
@@ -90,12 +90,12 @@ We ask the user for a name for their new pointcloud
 Enter a name for your new pointcloud [New Pointcloud]: My Awesome Pointcloud
 ```
 
-Using this information, we send a new request using the cookies from the login to `https://<account>.pointscene.com/wp-admin/admin-ajax.php`
+Using this information, we send a new request using the previously acquired cookies to `https://<account>.pointscene.com/wp-admin/admin-ajax.php`
 
 The request should contain the following inputs as either GET or POST fields
 
 ```
-action => pointscene_new_cloud
+action => 'pointscene_new_cloud'
 title => <pointcloud_title>
 ```
 
@@ -118,13 +118,15 @@ On success, the server will respond with JSON data like this (without comments):
 
 ### Upload the pointcloud files to the storage
 
-We then ask the user which storage backend they wish to use.
+Based on the storage options given, we then ask the user which storage backend they wish to use.
 
 ```
 Please select upload server location [0]:
 0) London
 1) Helsinki
 ```
+
+The final upload endpoint should be something like: `https://data1.pointscene.com/api/upload.php`
 
 Now we can upload the files via standard HTTP multipart/form-data POST request with the following fields:
 
@@ -135,7 +137,7 @@ pointcloud => <cloud> # the id of the new cloud
 key => <authkey> # upload auth key
 ```
 
-And of course the file itself of `Content-Type: text/plain`
+And of course the file itself in `Content-Type: text/plain`.
 
 The POST body should look something like this:
 
@@ -179,8 +181,8 @@ Content-Disposition: form-data; name="file"; filename="mypointcloud.laz"
 Content-Type: text/plain
 
 
-...
 
+...
 
 ------WebKitFormBoundarylLZcWAy2dlbMpklj--
 ```
@@ -200,6 +202,8 @@ On success, the server will respond with JSON like this:
 ```
 
 *Done !* You can now steer the user to edit their pointcloud on the Pointscene.com web interface via the edit link.
+
+### Putting it together
 
 Here's how the entire interaction looks like as an interactive CLI implementation:
 
