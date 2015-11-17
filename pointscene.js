@@ -17,7 +17,7 @@ var wp = {}
 var session = {}
 
 function auth(callback) {
-  // TODO check for existing auth cookie
+  // TODO: check for existing auth
   promptly.prompt('Pointscene.com account (<account>.pointscene.com):', function (err, account) {
     session.endpoint = 'https://' + account + '.' + endpoint
     promptly.prompt('login:', function (err, username) {
@@ -61,6 +61,15 @@ function newCloud(callback) {
         }
       },
       function(err, response, body) {
+        if(err) {
+          console.log('Unable to create cloud', err)
+          process.exit(1)
+        }
+        if(response.statusCode === 401) {
+          // login failed, login again
+          console.error('Unable to create cloud ', body)
+          return auth(newCloud)
+        }
         var res = JSON.parse(body)
         session.key = res.data.auth_key
         session.cloud = res.data.cloud
@@ -93,31 +102,40 @@ function upload(callback) {
 
   console.log('Uploading ' + filename + ' to ' + uploadEndpoint + '...');
 
-  request.post(
-    {
-      url: uploadEndpoint + '/api/upload.php',
-      formData: formData,
-    },
-    function (err, response, body) {
-      if (err) {
-        return console.error('Upload failed:', err)
-      }
-      var res = JSON.parse(body)
-      if (!res.OK) {
-        return console.error('Upload failed:', res.error)
-      }
+  // simple progress indicator
+  var progress = setInterval(function() { process.stdout.write('.') }, 1000)
 
-      console.log('Upload successful!')
-      console.log('View your new pointcloud: ' + session.edit)
-      return callback()
+  var body = ""
+  request.post({
+    url: uploadEndpoint + '/api/upload.php',
+    formData: formData,
+  })
+  .on('error', function(err) {
+    return console.error('Upload failed:', err)
+  })
+  .on('data', function(data) {
+    body += data; // we need this since we're streaming the request
+  })
+  .on('end', function () {
+
+    // stop our dumb progress indicator
+    clearInterval(progress)
+    process.stdout.write("\n")
+
+    var res = JSON.parse(body)
+    if (!res.OK) {
+      return console.error('Upload failed:', res.error)
     }
-  )
+
+    console.log('Upload successful!')
+    console.log('View your new pointcloud: ' + session.edit)
+    return callback()
+  })
 
 }
 
 ;(function main() {
 
-  // cli api
   program
     .version('1.0')
     .usage('<file>')
