@@ -1,4 +1,5 @@
 # Node Pointscene Client
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 Upload pointclouds to your Pointscene account from the command line interactively.
 
