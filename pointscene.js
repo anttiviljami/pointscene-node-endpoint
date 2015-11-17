@@ -13,9 +13,44 @@ var promptly = require('promptly')
 var cookies = request.jar()
 request = request.defaults({jar: cookies}) // request with cookie jar (yum!)
 
-var endpoint = 'pointscene.com'
-var session = {}
+var endpoint = 'pointscene.com' // we're connecting to the production server
+var session = {} // holds our session variables
 
+/**
+ * Entry point / Main function
+ */
+function main () {
+  // define our CLI api
+  program
+    .version('1.0')
+    .usage('<file>')
+    .parse(process.argv)
+
+  // we take exactly one file as an argument
+  if (program.args.length !== 1) {
+    program.help()
+    process.exit(1)
+  }
+
+  // see if file exists
+  try {
+    fs.statSync(program.args[0])
+  } catch (err) {
+    program.help()
+    process.exit(1)
+  }
+
+  // instructions in order
+  async.series([
+    auth,
+    add,
+    upload
+  ])
+}
+
+/**
+ * Login to Pointscene.com
+ */
 function auth (callback) {
   // TODO: check for existing auth
   promptly.prompt('Pointscene.com account (<account>.pointscene.com):', function (err, account) {
@@ -60,7 +95,10 @@ function auth (callback) {
   })
 }
 
-function newCloud (callback) {
+/**
+ * Create a new pointcloud
+ */
+function add (callback) {
   promptly.prompt('Enter a name for your new pointcloud [New Pointcloud]:', { default: 'New Pointcloud' }, function (err, title) {
     if (err) {
       console.error(err)
@@ -80,7 +118,7 @@ function newCloud (callback) {
         if (response.statusCode === 401) {
           // login failed, login again
           console.error('Unable to create cloud ', body)
-          return auth(newCloud)
+          return auth(add)
         }
         var res = JSON.parse(body)
         session.key = res.data.auth_key
@@ -107,6 +145,9 @@ function newCloud (callback) {
   })
 }
 
+/**
+ * Upload las/laz files to the Pointscene data server
+ */
 function upload (callback) {
   var file = program.args[0]
   var filename = path.basename(file)
@@ -159,28 +200,15 @@ function upload (callback) {
     })
 }
 
-;(function main () {
-  program
-    .version('1.0')
-    .usage('<file>')
-    .parse(process.argv)
-
-  if (program.args.length !== 1) {
-    program.help()
-    process.exit(1)
+if (require.main === module) {
+  // we're running this as a script
+  main()
+} else {
+  // allow importing this as a module
+  module.exports = {
+    main: main,
+    auth: auth,
+    add: add,
+    upload: upload
   }
-
-  // see if file exists
-  try {
-    fs.statSync(program.args[0])
-  } catch (err) {
-    program.help()
-    process.exit(1)
-  }
-
-  async.series([
-    auth,
-    newCloud,
-    upload
-  ])
-})()
+}
