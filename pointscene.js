@@ -2,6 +2,7 @@
 
 'use strict'
 
+var _ = require('lodash')
 var fs = require('fs')
 var path = require('path')
 var request = require('request')
@@ -12,8 +13,6 @@ var program = require('commander')
 var promptly = require('promptly')
 
 var endpoint = 'pointscene.com'
-var wp = {}
-
 var session = {}
 
 function auth(callback) {
@@ -52,7 +51,7 @@ function auth(callback) {
 }
 
 function newCloud(callback) {
-  promptly.prompt('Enter a name for your new pointcloud:', function (err, title) {
+  promptly.prompt('Enter a name for your new pointcloud [New Pointcloud]:', { default: 'New Pointcloud' }, function (err, title) {
     request.post(session.endpoint + '/wp-admin/admin-ajax.php',
       {
         form: {
@@ -74,7 +73,19 @@ function newCloud(callback) {
         session.key = res.data.auth_key
         session.cloud = res.data.cloud
         session.edit = res.data.edit
-        return callback()
+
+        var options = _.keys(res.data.storage)
+        var storage = _.values(res.data.storage)
+
+        var optionstring = "\n"
+        _.each(options, function(option, key) {
+          optionstring += key + ') ' + option + "\n"
+        })
+
+        promptly.choose('Please select upload server location [0]: ' + optionstring, _.keys(options), { default: '0' }, function(err, option) {
+          session.storage = storage[parseInt(option)]
+          return callback()
+        })
       }
     )
   })
@@ -98,7 +109,7 @@ function upload(callback) {
     }
   }
 
-  var uploadEndpoint = 'https://data1.pointscene.com'
+  var uploadEndpoint = session.storage
 
   console.log('Uploading ' + filename + ' to ' + uploadEndpoint + '...');
 
@@ -107,7 +118,7 @@ function upload(callback) {
 
   var body = ""
   request.post({
-    url: uploadEndpoint + '/api/upload.php',
+    url: uploadEndpoint + 'upload.php',
     formData: formData,
   })
   .on('error', function(err) {
