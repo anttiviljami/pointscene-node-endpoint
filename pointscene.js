@@ -44,7 +44,8 @@ function main () {
   async.series([
     auth,
     add,
-    upload
+    upload,
+    process.exit
   ])
 }
 
