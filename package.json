@@ -24,6 +24,7 @@
     "request": "^2.65.0"
   },
   "devDependencies": {
-    "gulp": "^3.9.0"
+    "gulp": "^3.9.0",
+    "gulp-sym": "0.0.14"
   }
 }
