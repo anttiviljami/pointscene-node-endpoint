@@ -1,4 +1,4 @@
-# Node Pointscene Client
+# Pointscene Node Client
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 Upload pointclouds to your [Pointscene.com](https://pointscene.com) account from the command line interactively.
@@ -12,7 +12,7 @@ See documentation for more info
 Clone this repo, run npm install, done !
 
 ```
-git clone https://github.com/davijo/node-pointscene-client
+git clone https://github.com/davijo/pointscene-node-client
 cd node-pointscene-client
 npm install
 ```
