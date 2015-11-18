@@ -77,11 +77,11 @@ function auth (callback) {
           },
           function (err, response) {
             if (err) {
-              console.log(err)
+              return console.error(err)
             }
             if (response.statusCode === 401) {
               // login failed
-              console.log('Login incorrect.')
+              console.error('Login incorrect.')
               return auth(callback)
             }
             console.log('Login successful!')
@@ -113,12 +113,11 @@ function add (callback) {
       },
       function (err, response, body) {
         if (err) {
-          console.log('Unable to create cloud', err)
-          process.exit(1)
+          return console.error('Unable to create cloud', err)
         }
         if (response.statusCode === 401) {
           // login failed, login again
-          console.error('Unable to create cloud ', body)
+          console.error('Unable to create cloud', body)
           return auth(add)
         }
         var res = JSON.parse(body)
@@ -169,7 +168,7 @@ function upload (callback) {
 
   var uploadEndpoint = session.storage
 
-  console.log('Uploading ' + filename + ' to ' + uploadEndpoint + '...')
+  console.log('Uploading', filename, 'to',  uploadEndpoint + '...')
 
   // simple progress indicator
   var progress = setInterval(function () { process.stdout.write('.') }, 1000)
@@ -196,7 +195,7 @@ function upload (callback) {
       }
 
       console.log('Upload successful!')
-      console.log('View your new pointcloud: ' + session.edit)
+      console.log('View your new pointcloud:', session.edit)
       return callback()
     })
 }
