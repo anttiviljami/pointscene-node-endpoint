@@ -1,5 +1,5 @@
 {
-  "name": "pointscene-node-client",
+  "name": "pointscene-node-endpoint",
   "version": "1.0.0",
   "description": "",
   "main": "pointscene.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/davijo/pointscene-node-client"
+    "url": "https://github.com/davijo/pointscene-node-endpoint"
   },
   "author": "Antti Kuosmanen",
   "license": "GPLv2",
   "bugs": {
-    "url": "https://github.com/davijo/pointscene-node-client/issues"
+    "url": "https://github.com/davijo/pointscene-node-endpoint/issues"
   },
-  "homepage": "https://github.com/davijo/pointscene-node-client",
+  "homepage": "https://github.com/davijo/pointscene-node-endpoint",
   "dependencies": {
     "async": "^1.5.0",
     "commander": "^2.9.0",
