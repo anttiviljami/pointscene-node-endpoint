@@ -22,5 +22,8 @@
     "lodash": "^3.10.1",
     "promptly": "^0.2.1",
     "request": "^2.65.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0"
   }
 }

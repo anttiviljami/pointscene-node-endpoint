@@ -9,12 +9,13 @@ See documentation for more info
 
 ## Installation
 
-Clone this repo, run npm install, done !
+Clone this repo, run npm install, run gulp install (optional), done !
 
 ```
 git clone https://github.com/davijo/pointscene-node-client
 cd node-pointscene-client
 npm install
+gulp install
 ```
 
 ## Usage
@@ -22,7 +23,7 @@ npm install
 Run `pointscene` as an executable from the command line. See --help for options.
 
 ```
-$ ./pointscene
+$ pointscene
 
   Usage: pointscene <file>
 
@@ -44,7 +45,7 @@ Here's how it works:
 In this example we take the file as a cli parameter.
 
 ```
-$ ./pointscene mypointcloud.laz
+$ pointscene mypointcloud.laz
 ```
 
 The file has to be a proper las/laz/zip point file containing real pointcloud data.
