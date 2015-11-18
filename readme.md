@@ -9,18 +9,17 @@ See documentation for more info
 
 ## Installation
 
-Clone this repo, run npm install, run gulp install (optional), done !
+Clone this repo, run npm install, done !
 
 ```
 git clone https://github.com/davijo/pointscene-node-endpoint
 cd node-pointscene-client
-npm install
-gulp install
+npm install -g
 ```
 
 ## Usage
 
-Run `pointscene.js` as an executable from the command line. If you ran `gulp install`, it should already be accessible in your $PATH as `pointscene`. See --help for options.
+Run `pointscene.js` as an executable from the command line. If you ran `npm install -g`, it should already be accessible in your $PATH as `pointscene`. See --help for options.
 
 ```
 $ pointscene

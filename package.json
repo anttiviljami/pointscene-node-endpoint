@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "pointscene.js",
+  "files": [
+    "pointscene.js"
+  ],
+  "bin": {
+    "pointscene": "pointscene.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,9 +28,5 @@
     "lodash": "^3.10.1",
     "promptly": "^0.2.1",
     "request": "^2.65.0"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-sym": "0.0.14"
   }
 }
