@@ -20,7 +20,7 @@ gulp install
 
 ## Usage
 
-Run `pointscene` as an executable from the command line. See --help for options.
+Run `pointscene.js` as an executable from the command line. If you ran `gulp install`, it should already be accessible in your $PATH as `pointscene`. See --help for options.
 
 ```
 $ pointscene
@@ -209,7 +209,7 @@ On success, the server will respond with JSON like this:
 Here's how the entire interaction looks like as an interactive CLI implementation:
 
 ```
-$ ./pointscene mypointcloud.laz
+$ pointscene mypointcloud.laz
 Pointscene.com account (<account>.pointscene.com): dev
 login: antti
 password:
